@@ -1,43 +1,69 @@
-let size = 20;
+let size = 500;
 let geneSize = 255 * 3
+
+let generation = 0
 
 let currentAge = []
 let newAge = []
 
+let colorMode = "RGB"
+
 // [1,....,0....,0....]の255*3の大きさの配列
-const goal = []
-for (let i = 0; i < 255; i++) {
-    goal.push(1)
-}
-for (let i = 0; i < 255 * 2; i++) {
-    goal.push(0)
+let goal = []
+// for (let i = 0; i < 255; i++) {
+//     goal.push(1)
+// }
+// for (let i = 0; i < 255 * 2; i++) {
+//     goal.push(0)
+// }
+
+function change() {
+    clear()
+    for (let i = 0; i < size; i++) {
+        currentAge[i] = creageGenome(geneSize)
+    }
+    generation = 0
+    goal = []
+    for (let i=0;i<255*3;i++){
+        goal.push(Math.round(Math.random()))
+    }
 }
 
 
 function setup() {
     createCanvas(710, 400)
-    // background(0)
-    noLoop()
-    for (let i = 0; i < size; i++) {
-        currentAge[i] = creageGenome(geneSize)
-    }
-    frameRate(5000)
+    background(255)
+    // noLoop()
+    noStroke()
+
+
+
+    button = createButton("change")
+    button.position(20,20)
+    button.mousePressed(change)
+    change()
 }
 
 
 function draw() {
-    const elite = selection(currentAge)
-    const progeny = []
-    for (let i = 0; i < elite.length - 1; i++) {
-        progeny.push(...cross(elite[i], elite[i + 1]))
+
+
+    if(generation < 300) {
+        const elite = selection(currentAge)
+        const progeny = []
+        for (let i = 0; i < elite.length - 1; i++) {
+            progeny.push(...cross(elite[i], elite[i + 1]))
+        }
+        newAge = nextGeneration(currentAge, elite, progeny)
+        newAge.forEach((age, index) => {
+            const angle = random(TWO_PI)
+            fill(...age.getColor())
+            ellipse(710 / 2 + random(300 - generation) * cos(angle), 400 / 2 + random(300 - generation) * sin(angle), 20, 20)
+        })
+        generation += 2
+        currentAge = newAge
+        newAge = []
     }
-    newAge = nextGeneration(currentAge, elite, progeny)
-    newAge.forEach((age, index) => {
-        fill(...age.getColor())
-        ellipse(Math.random() * window.innerWidth, Math.random() * window.innerHeight, 30, 30)
-    })
-    currentAge = newAge
-    newAge = []
 }
 
 function creageGenome(length) {
@@ -82,7 +108,7 @@ function selection(age) {
     const elite = age.sort((a, b) => {
         return b.getEvaluate(goal) - a.getEvaluate(goal)
     })
-    return elite.slice(0, 20)
+    return elite.slice(0, 2)
 }
 
 function cross(bios1, bios2) {
