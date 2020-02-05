@@ -70,7 +70,7 @@ function draw() {
 function creageGenome(length) {
     const genome_list = []
     for (let i = 0; i < length; i++) {
-        genome_list.push(Math.round(Math.random()/2+0.4))
+        genome_list.push(Math.round(Math.random()+0.3))
     }
     return new Biont(genome_list)
 }
