@@ -27,6 +27,7 @@ function change() {
     for (let i=0;i<255*3;i++){
         goal.push(Math.round(Math.random()))
     }
+    console.log(goal)
 }
 
 
@@ -69,7 +70,7 @@ function draw() {
 function creageGenome(length) {
     const genome_list = []
     for (let i = 0; i < length; i++) {
-        genome_list.push(Math.round(Math.random()))
+        genome_list.push(Math.round(Math.random()/2+0.4))
     }
     return new Biont(genome_list)
 }
