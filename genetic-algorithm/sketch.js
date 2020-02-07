@@ -61,7 +61,7 @@ function draw() {
             fill(...age.getColor())
             ellipse(710 / 2 + random(300 - generation) * cos(angle), 400 / 2 + random(300 - generation) * sin(angle), 20, 20)
         })
-        generation += 2
+        generation += 3
         currentAge = newAge
         newAge = []
     }
