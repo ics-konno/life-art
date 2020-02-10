@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>genetic-algorithm</title>
+</head>
+<body>
+  <canvas id="canvas" width="1280" height="640" style="background-color: black"></canvas>
+
+  <script>
+    const canvas = document.querySelector("canvas")
+    const context = canvas.getContext("2d")
+
+    let size = 80
+    let geneSize = 360
+
+    let generation = 0
+    let currentAge = []
+    let newAge = []
+
+    let goal = []
+
+    function creageGenome(length) {
+        const genome_list = []
+        // for (let i = 0; i < length; i++) {
+        //     genome_list.push(Math.round(Math.random()))
+        // }
+        let c = Math.floor(Math.random()*360)
+        for (let i = 0; i < c; i++){
+            genome_list.push(1)
+        }
+        for(let j = 0; j < 360 - c; j++){
+            genome_list.push(0)
+        }
+
+        return new Biont(genome_list)
+    }
+
+    class Biont {
+        constructor(genome_list) {
+            this.genome_list = genome_list
+            this.evaluation = this.getEvaluate(goal)
+        }
+
+        getEvaluate(goal) {
+            let score = 0
+            for (let i = 0; i < this.genome_list.length; i++) {
+                if (goal[i] === this.genome_list[i]) {
+                    score++
+                }
+            }
+            return score / geneSize
+        }
+
+        getColor() {
+            let c = 0
+            let cArr = []
+            for (let i = 0; i < this.genome_list.length; i++) {
+                c += this.genome_list[i]
+                if ((i + 1) % 360 === 0) {
+                    cArr.push(c)
+                    c = 0
+                }
+                // c += this.genome_list[i]
+            }
+            return cArr
+            // return c
+        }
+    }
+
+    function selection(age) {
+        const elite = age.sort((a, b) => {
+            return b.getEvaluate(goal) - a.getEvaluate(goal)
+        })
+        return elite.slice(0, 2)
+    }
+
+    function cross(bios1, bios2) {
+        const cross_one = Math.round(Math.random()*geneSize)
+        const cross_two = Math.round(Math.random() *(geneSize-cross_one))
+        const one = bios1.genome_list
+        const two = bios2.genome_list
+        const progeny_one = [...one.slice(0, cross_one), ...two.slice(cross_one, cross_two), ...one.slice(cross_two, geneSize)]
+        const progeny_two = [...two.slice(0, cross_one), ...one.slice(cross_one, cross_two), ...two.slice(cross_two, geneSize)]
+        return [new Biont(progeny_one), new Biont(progeny_two)]
+    }
+
+
+    function nextGeneration(age, elite, progeny) {
+        const sorted_age = age.sort((a, b) => {
+            return a.getEvaluate(goal) - b.getEvaluate(goal)
+        })
+        sorted_age.splice(0, elite.length + progeny.length)
+        sorted_age.push(...elite, ...progeny)
+        return sorted_age
+    }
+
+    for (let i = 0; i < size; i++) {
+        currentAge[i] = creageGenome(geneSize)
+    }
+    generation = 0
+    goal = []
+    const goalC = Math.floor(Math.random()*360)
+
+    for (let i=0;i<360;i++){
+        if(i < goalC){
+          goal.push(1)
+        }else{
+            goal.push(0)
+        }
+    }
+    context.beginPath()
+    context.fillStyle = "hsl("+goalC + ",50%,50%)"
+    context.rect(canvas.width - 30, 0, canvas.width, canvas.height)
+    context.fill()
+    function loop(timestamp){
+        // context.clearRect(0,0,canvas.width, canvas.height)
+        if(generation < 300){
+            const elite = selection(currentAge)
+            const progeny = []
+            for (let i = 0; i < elite.length - 1; i++) {
+                progeny.push(...cross(elite[i], elite[i + 1]))
+            }
+            newAge = nextGeneration(currentAge, elite, progeny)
+            newAge.forEach((age, index) => {
+                const angle = Math.random() * Math.PI * 2
+                context.beginPath()
+                context.fillStyle = "hsl("+age.getColor()[0]+",50%,50%)"
+                console.log(age.getColor())
+                // context.arc(710 / 2 + Math.random() * (300 - generation) * Math.cos(angle), 400 / 2 + Math.random() * (300 - generation) * Math.sin(angle), 20, 0, 2 * Math.PI)
+                context.arc(2 + 4 * generation,2 + index *8  , 4, 0, 2 * Math.PI)
+                context.fill()
+
+            })
+            generation += 3
+            currentAge = newAge
+            newAge = []
+            console.log(generation)
+        }
+        window.requestAnimationFrame(ts => loop(ts))
+    }
+    window.requestAnimationFrame(ts => loop(ts))
+  </script>
+</body>
+</html>

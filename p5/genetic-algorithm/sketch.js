@@ -6,7 +6,6 @@ let generation = 0
 let currentAge = []
 let newAge = []
 
-let colorMode = "RGB"
 
 // [1,....,0....,0....]の255*3の大きさの配列
 let goal = []
@@ -48,7 +47,7 @@ function setup() {
 
 function draw() {
 
-
+    colorMode(HSB)
     if(generation < 300) {
         const elite = selection(currentAge)
         const progeny = []

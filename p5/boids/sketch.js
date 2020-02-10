@@ -7,7 +7,7 @@ function setup() {
     background(255)
    noFill()
     stroke(255,255,255)
-    for(let i = 0; i<15;i++){
+    for(let i = 0; i<30;i++){
         Boid.push(new Bird(200+random(500),200+random(600),2, 2,i))
     }
 }
@@ -72,7 +72,7 @@ class Bird {
         this.v1.y = (this.v1.y - this.y)/300
     }
     avoid(){
-        const DIST_THRESHOLD = 30
+        const DIST_THRESHOLD = 20
         Boid.forEach(bird => {
             if(dist(this.x, this.y, bird.x, bird.y) < DIST_THRESHOLD){
                 this.v2.x -= (bird.x - this.x)
