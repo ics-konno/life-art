@@ -18,6 +18,9 @@
     let currentAge = []
     let newAge = []
 
+    let INDIVISUAL_MUTATION = 0.05
+    let GENOME_MUTATION = 0.05
+
     let goal = []
 
     function creageGenome(length) {
@@ -66,8 +69,12 @@
             return cArr
             // return c
         }
+        setGenome(genome){
+            this.genome_list = genome
+        }
     }
 
+    // 優秀な遺伝子を選別します
     function selection(age) {
         const elite = age.sort((a, b) => {
             return b.getEvaluate(goal) - a.getEvaluate(goal)
@@ -75,6 +82,7 @@
         return elite.slice(0, 2)
     }
 
+    // 交配させる関数です
     function cross(bios1, bios2) {
         const cross_one = Math.round(Math.random()*geneSize)
         const cross_two = Math.round(Math.random() *(geneSize-cross_one))
@@ -85,7 +93,31 @@
         return [new Biont(progeny_one), new Biont(progeny_two)]
     }
 
+    // 遺伝子に変異を加えます
+    function mutation(age, individual_mutation, genome_mutation) {
+        let ga_list = []
+        age.forEach(i => {
+            console.log(i)
+            if(individual_mutation > Math.random()){
+                let genom_list = []
+                i.genome_list.forEach(genom => {
+                    if(genome_mutation > Math.random()){
+                        genom_list.push(Math.round(Math.random()))
+                    }else{
+                        genom_list.push(genom)
+                    }
+                })
+                i.setGenome(genom_list)
+                ga_list.push(i)
+            }else{
+                ga_list.push(i)
+            }
+        })
+        return ga_list
+    }
 
+
+    // 次世代を作ります
     function nextGeneration(age, elite, progeny) {
         const sorted_age = age.sort((a, b) => {
             return a.getEvaluate(goal) - b.getEvaluate(goal)
@@ -95,20 +127,28 @@
         return sorted_age
     }
 
-    for (let i = 0; i < size; i++) {
-        currentAge[i] = creageGenome(geneSize)
-    }
-    generation = 0
-    goal = []
-    const goalC = Math.floor(Math.random()*360)
+    function createGoal(){
+        goal = []
+        const goalC = Math.floor(Math.random()*360)
 
-    for (let i=0;i<360;i++){
-        if(i < goalC){
-          goal.push(1)
-        }else{
-            goal.push(0)
+        for (let i=0;i<360;i++){
+            if(i < goalC){
+                goal.push(1)
+            }else{
+                goal.push(0)
+            }
         }
     }
+
+    function setup(){
+        for (let i = 0; i < size; i++) {
+            currentAge[i] = creageGenome(geneSize)
+        }
+        generation = 0
+        createGoal()
+    }
+
+
     context.beginPath()
     context.fillStyle = "hsl("+goalC + ",50%,50%)"
     context.rect(canvas.width - 30, 0, canvas.width, canvas.height)
@@ -122,11 +162,11 @@
                 progeny.push(...cross(elite[i], elite[i + 1]))
             }
             newAge = nextGeneration(currentAge, elite, progeny)
+            newAge = mutation(newAge, INDIVISUAL_MUTATION, GENOME_MUTATION)
             newAge.forEach((age, index) => {
                 const angle = Math.random() * Math.PI * 2
                 context.beginPath()
                 context.fillStyle = "hsl("+age.getColor()[0]+",50%,50%)"
-                console.log(age.getColor())
                 // context.arc(710 / 2 + Math.random() * (300 - generation) * Math.cos(angle), 400 / 2 + Math.random() * (300 - generation) * Math.sin(angle), 20, 0, 2 * Math.PI)
                 context.arc(2 + 4 * generation,2 + index *8  , 4, 0, 2 * Math.PI)
                 context.fill()
@@ -135,7 +175,6 @@
             generation += 3
             currentAge = newAge
             newAge = []
-            console.log(generation)
         }
         window.requestAnimationFrame(ts => loop(ts))
     }
