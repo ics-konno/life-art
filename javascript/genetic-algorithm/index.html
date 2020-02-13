@@ -150,7 +150,7 @@
 
 
     context.beginPath()
-    context.fillStyle = "hsl("+goalC + ",50%,50%)"
+    context.fillStyle = `hsl(${goalC},50%,50%)`
     context.rect(canvas.width - 30, 0, canvas.width, canvas.height)
     context.fill()
     function loop(timestamp){
@@ -166,7 +166,7 @@
             newAge.forEach((age, index) => {
                 const angle = Math.random() * Math.PI * 2
                 context.beginPath()
-                context.fillStyle = "hsl("+age.getColor()[0]+",50%,50%)"
+                context.fillStyle = `hsl(${age.getColor()[0]},50%,50%)`
                 // context.arc(710 / 2 + Math.random() * (300 - generation) * Math.cos(angle), 400 / 2 + Math.random() * (300 - generation) * Math.sin(angle), 20, 0, 2 * Math.PI)
                 context.arc(2 + 4 * generation,2 + index *8  , 4, 0, 2 * Math.PI)
                 context.fill()

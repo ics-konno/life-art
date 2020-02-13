@@ -30,13 +30,15 @@
         let c
         if (this.status === "S") {
           c = 0
+          context.fillStyle = "#000000"
         } else if (this.status === "I") {
           c = 100
+          context.fillStyle = "#ff0000"
         } else if (this.status === "R") {
           c = 200
+          context.fillStyle = "#c8c8c8"
         }
-        context.fillStyle = `rgb(${c}, ${c}, ${c})`
-        // context.strokeStyle = "#000000"
+        // context.fillStyle = `rgb(${c}, ${c}, ${c})`
         context.beginPath()
         context.arc(this.x + 20, this.y + 20, this.r,0, 2 * Math.PI)
         context.fill()
