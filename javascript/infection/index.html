@@ -70,11 +70,12 @@
     }
 
     setup()
-    function loop(timestamp){
+    let timer1 = setInterval("loop()", 1000)
+    function loop(){
         context.clearRect(0,0,canvas.width, canvas.height)
-      S += -(B * k * Si * Ii)
-      I += (B * k * Si * Ii - Ii / D)
-      R += (Ii / D)
+      S = Si -(B * k * Si * Ii)
+      I = Ii + (B * k * Si * Ii - Ii / D)
+      R = Ri + (Ii / D)
       S = Math.round(S)
       I = Math.round(I)
       R = Math.round(R)
@@ -97,11 +98,11 @@
       Ii = I
       Ri = R
 
-      setTimeout(() => {
-        window.requestAnimationFrame(ts => loop(ts))
-      }, 1000)
+      // setTimeout(() => {
+      //   window.requestAnimationFrame(ts => loop(ts))
+      // }, 1000)
     }
-    window.requestAnimationFrame(ts => loop(ts))
+    // window.requestAnimationFrame(ts => loop(ts))
   </script>
 </body>
 </html>
