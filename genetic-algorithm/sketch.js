@@ -1,12 +1,11 @@
 let size = 500;
-let geneSize = 255 * 3
+let geneSize = 360 + 100 * 2
 
 let generation = 0
 
 let currentAge = []
 let newAge = []
 
-let colorMode = "RGB"
 
 // [1,....,0....,0....]の255*3の大きさの配列
 let goal = []
@@ -20,12 +19,15 @@ let goal = []
 function change() {
     clear()
     for (let i = 0; i < size; i++) {
-        currentAge[i] = creageGenome(geneSize)
+        currentAge[i] = creageGenome()
     }
     generation = 0
     goal = []
-    for (let i=0;i<255*3;i++){
+    for (let i=0;i<360;i++){
         goal.push(Math.round(Math.random()))
+    }
+    for (let i=0;i<100*2;i++){
+        goal.push(1)
     }
     console.log(goal)
 }
@@ -37,7 +39,7 @@ function setup() {
     // noLoop()
     noStroke()
 
-
+    colorMode(HSB,360,100,100)
 
     button = createButton("change")
     button.position(20,20)
@@ -67,10 +69,13 @@ function draw() {
     }
 }
 
-function creageGenome(length) {
+function creageGenome() {
     const genome_list = []
-    for (let i = 0; i < length; i++) {
-        genome_list.push(Math.round(Math.random()+0.3))
+    for (let i = 0; i < 360; i++) {
+        genome_list.push(Math.round(Math.random()*Math.random()))
+    }
+    for(let i = 0; i < 100 *2; i++){
+        genome_list.push(1)
     }
     return new Biont(genome_list)
 }
@@ -96,7 +101,7 @@ class Biont {
         let cArr = []
         for (let i = 0; i < this.genome_list.length; i++) {
             c += this.genome_list[i]
-            if ((i + 1) % 255 === 0) {
+            if (i + 1 === 360 || i + 1 === 460 || i + 1 === 560) {
                 cArr.push(c)
                 c = 0
             }
