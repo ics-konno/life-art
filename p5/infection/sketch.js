@@ -3,7 +3,7 @@ let O
 let N = 100
 let B = 0.0015
 let k = 12
-let D = 1
+let D = 2
 let S = 99, I = 1, R = 0
 
 let Si = S, Ii = I, Ri = I
@@ -37,9 +37,9 @@ function draw() {
     if (millis() - start > 500) {
         clear()
 
-        S += -(B * k * Si * Ii)
-        I += (B * k * Si * Ii - Ii / D)
-        R += (Ii / D)
+        S = Si -(B * k * Si * Ii)
+        I = Ii + (B * k * Si * Ii - Ii / D)
+        R =  Ri + (Ii / D)
         S = round(S)
         I = round(I)
         R = round(R)

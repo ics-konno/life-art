@@ -50,7 +50,7 @@ function setup() {
 
 function draw() {
 
-
+    colorMode(HSB)
     if(generation < 300) {
         const elite = selection(currentAge)
         const progeny = []
