@@ -26,7 +26,7 @@
         this.r = r
         this.status = status
       }
-      draw() {
+      draw(value) {
         let c
         if (this.status === "S") {
           c = 0
@@ -38,11 +38,13 @@
           c = 200
           context.fillStyle = "#c8c8c8"
         }
+
         // context.fillStyle = `rgb(${c}, ${c}, ${c})`
-        context.beginPath()
-        context.arc(this.x + 20, this.y + 20, this.r,0, 2 * Math.PI)
-        context.fill()
-        context.closePath()
+        // context.beginPath()
+        // context.arc(this.x + 20, this.y + 20, this.r,0, 2 * Math.PI)
+        context.fillRect(this.x, 0, 100, value)
+        // context.fill()
+        // context.closePath()
       }
       update(newStatus){
         this.status = newStatus
@@ -50,45 +52,47 @@
     }
 
     function setup(){
-      for (let i = 0; i < 10; i++) {
-        for (let j = 0; j < 10; j++) {
-          if (i * j < 100) {
-            group.push(new Person(i * 20, j * 20, 10, "S"))
-          } else {
-            group.push(new Person(i * 20, j * 20, 10, "I"))
-          }
-        }
-      }
-      group.forEach(person => person.draw())
+    //   for (let i = 0; i < 10; i++) {
+    //     for (let j = 0; j < 10; j++) {
+    //       if (i * j < 100) {
+    //         group.push(new Person(i * 20, j * 20, 10, "S"))
+    //       } else {
+    //         group.push(new Person(i * 20, j * 20, 10, "I"))
+    //       }
+    //     }
+    //   }
+    //   group.forEach(person => person.draw())
+      group.push(new Person(0,0,"S"), new Person(150,0,"I"), new Person(300,0,"R"))
     }
 
     function changeStatus(group, statusArr) {
       group.forEach((person, index) => {
-        person.update(statusArr[index])
-        person.draw()
+        // person.update(statusArr[index])
+        person.draw(statusArr[index])
       })
     }
 
     setup()
-    let timer1 = setInterval("loop()", 1000)
+    let timer1 = setInterval("loop()", 100)
     function loop(){
         context.clearRect(0,0,canvas.width, canvas.height)
       S = Si -(B * k * Si * Ii)
       I = Ii + (B * k * Si * Ii - Ii / D)
       R = Ri + (Ii / D)
-      S = Math.round(S)
-      I = Math.round(I)
-      R = Math.round(R)
-      statusArr = []
-      for (let i = 0; i < S; i++) {
-        statusArr.push("S")
-      }
-      for (let j = 0; j < I; j++) {
-        statusArr.push("I")
-      }
-      for (let k = 0; k < R; k++) {
-        statusArr.push("R")
-      }
+      // S = Math.round(S)
+      // I = Math.round(I)
+      // R = Math.round(R)
+
+      statusArr = [S,I,R]
+      // for (let i = 0; i < S; i++) {
+      //   statusArr.push("S")
+      // }
+      // for (let j = 0; j < I; j++) {
+      //   statusArr.push("I")
+      // }
+      // for (let k = 0; k < R; k++) {
+      //   statusArr.push("R")
+      // }
       // text("S:" + (S), 250, 50)
       // text("I:" + (I), 250, 80)
       // text("R:" + (R), 250, 110)

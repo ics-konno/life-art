@@ -43,8 +43,6 @@
       context.fillRect(x*cellSize, y*cellSize, cellSize-1, cellSize-1)
     }
 
-    initCells()
-
     function checkAround(x, y) {
       let count = 0
       for(let i = -1; i <=1; i++){
@@ -73,6 +71,7 @@
       draw()
     }
 
+    initCells()
     let timer1 = setInterval("loop()", 100)
     function loop(){
         proceed()
